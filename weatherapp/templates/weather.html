@@ -1,0 +1,67 @@
+{% extends 'main.html' %}
+{% block content %}
+{% load static %}
+
+
+<!-- <head>
+  <link rel="stylesheet" href="{% static 'css/weather.css' %}">
+  <link rel="icon" href="{{data.current.condition.icon}}" type="image/x-icon">
+  <link rel="shortcut icon" href="{{data.current.condition.icon}}" type="image/x-icon">
+  <link rel="stylesheet" href="{% static 'css/change.css' %}">
+</head> -->
+<div class="container">
+    <div class="weather-side">
+      <div class="weather-gradient"></div>
+      <div class="date-container">
+        <h2 class="date-dayname">{{day}}</h2><span class="date-day">{{data.current.last_updated}}</span><i class="location-icon" data-feather="map-pin"></i><span class="location">{{data.location.name}}, {{data.location.country}}</span>
+      </div>
+      <div class="weather-container"><i class="weather-icon" data-feather="sun"></i>
+        <h1 class="weather-temp">{{data.current.temp_c}}°C</h1>
+        <h3 class="weather-desc">{{data.current.condition.text}}</h3>
+      </div>
+    </div>
+    <div class="info-side">
+      <div class="today-info-container">
+        <div class="today-info">
+          <div class="precipitation"> <span class="title">PRECIPITATION</span><span class="value">{{data.current.precip_mm}} mm</span>
+            <div class="clear"></div>
+          </div>
+          <div class="humidity"> <span class="title">HUMIDITY</span><span class="value">{{data.current.humidity}} %</span>
+            <div class="clear"></div>
+          </div>
+          <div class="humidity"> <span class="title">FEELS LIKE </span><span class="value">{{data.current.feelslike_c}} °C</span>
+            <div class="clear"></div>
+          </div>
+          <div class="wind"> <span class="title">WIND</span><span class="value">{{data.current.wind_kph}} km/h</span>
+            <div class="clear"></div>
+          </div>
+        </div>
+      </div>
+      <div class="week-container">
+        <ul class="week-list">
+          {% for key,values in forecast.items  %}
+            <li><i class="day-icon" data-feather="cloud"></i><span class="day-name">{{key}}</span><span class="day-temp">{{values}}°C</span></li>
+
+          {% endfor %}
+          <div class="clear"></div>
+        </ul>
+      </div>
+
+        <div class="location-container">
+
+          <!-- <button class="location-button"> <i data-feather="map-pin"></i><span>Change location</span></button> -->
+        <form action="" method="post">
+          {% csrf_token %}
+          <div class="search-box">
+            <button type="button" class="btn-search" id="btnsave"><i class="zmdi zmdi-search"></i>
+              </button>
+            <input type="text" id="search_query" name="search_query" class="input-search" placeholder="Change Location (city,country)">
+          </div>
+      
+        </form>
+
+        </div>
+
+    </div>
+  </div>
+  {% endblock %} 

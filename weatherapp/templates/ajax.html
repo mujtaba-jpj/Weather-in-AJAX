@@ -1,0 +1,54 @@
+<script>
+    $('#btnsave').click(function () {
+
+        let search_query_spaced = $("#search_query").val()
+        let search_query = search_query_spaced.replace(" ", "")
+        let csr = $("input[name=csrfmiddlewaretoken]").val()
+
+        if (search_query == "") {
+            console.log('invalid input')
+        }
+        else {
+            mydata = { csrfmiddlewaretoken: csr, search_query: search_query }
+            $.ajax({
+                url: "{% url 'weather' %}",
+                method: "POST",
+                data: mydata,
+                dataType: "json",
+                success: function (data) {
+                    $('.date-dayname').text(data.context.day)
+                    $('.date-day').text(data.context.data.current.last_updated)
+                    $('.location').text(data.context.data.location.name + ', ' + data.context.data.location.country)
+                    $('.weather-temp').text(data.context.data.current.temp_c+' °C')
+                    $('.weather-desc').text(data.context.data.current.condition.text)
+
+                    values = [data.context.data.current.precip_mm+' mm',
+                    data.context.data.current.humidity+' %',
+                    data.context.data.current.feelslike_c+' °C',
+                    data.context.data.current.wind_kph+' km/h']
+
+                    $('.value').each(function (index, element) {
+                        var newValue = values[index]; 
+                        $(element).text(newValue); 
+                    });
+                    //console.log($('.day-temp'))
+                    //console.log($('.day-name'))
+
+                    let forecast_days = Object.keys(data.context.forecast)
+                    let forecast_temp = Object.values(data.context.forecast)
+                    
+                    $('.day-name').each(function (index, element) {
+                        var newValue = forecast_days[index]; 
+                        $(element).text(newValue);  
+                    });
+
+                    $('.day-temp').each(function (index, element) {
+                        var newValue = forecast_temp[index]+' °C'; 
+                        $(element).text(newValue); 
+                    });
+
+                }
+            })
+        }
+    })
+</script>
