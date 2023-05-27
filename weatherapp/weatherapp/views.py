@@ -29,7 +29,7 @@ def weather(request):
 
         # error forwarding 
         if data.status_code == 400:
-            return render(request, '400.html')
+            return JsonResponse({'status': 2})
 
         data = data.json()
         # current day
@@ -63,7 +63,7 @@ def weather(request):
 
 
     else:
-        pass
+        return JsonResponse({'status': 0})
 
 
 

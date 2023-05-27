@@ -1,12 +1,33 @@
 <script>
-    $('#btnsave').click(function () {
+
+    $(document).ready(function () {
+        $('#search_form #search_query').on('keypress', function (event) {
+            // Check if the Enter key was pressed
+            if (event.which === 13) {
+                event.preventDefault();
+                get_weather()
+            }
+        });
+    });
+
+    $(document).ready(function () {
+        $('#btnsave').on('click', function () {
+            // Check if the Enter key was pressed
+            var bsAlert = new bootstrap.Alert()
+            get_weather()
+        });
+    });
+
+
+    function get_weather() {
 
         let search_query_spaced = $("#search_query").val()
         let search_query = search_query_spaced.replace(" ", "")
         let csr = $("input[name=csrfmiddlewaretoken]").val()
 
         if (search_query == "") {
-            console.log('invalid input')
+            displayAlert('Please Input Valid data')
+
         }
         else {
             mydata = { csrfmiddlewaretoken: csr, search_query: search_query }
@@ -16,39 +37,72 @@
                 data: mydata,
                 dataType: "json",
                 success: function (data) {
-                    $('.date-dayname').text(data.context.day)
-                    $('.date-day').text(data.context.data.current.last_updated)
-                    $('.location').text(data.context.data.location.name + ', ' + data.context.data.location.country)
-                    $('.weather-temp').text(data.context.data.current.temp_c+' °C')
-                    $('.weather-desc').text(data.context.data.current.condition.text)
+                    if (data.status == 1) {
+                        if ($('.alert')) {
+                            $('.alert').remove()
+                        }
 
-                    values = [data.context.data.current.precip_mm+' mm',
-                    data.context.data.current.humidity+' %',
-                    data.context.data.current.feelslike_c+' °C',
-                    data.context.data.current.wind_kph+' km/h']
+                        $('.date-dayname').text(data.context.day)
+                        $('.date-day').text(data.context.data.current.last_updated)
+                        $('.location').text(data.context.data.location.name + ', ' + data.context.data.location.country)
+                        $('.weather-temp').text(data.context.data.current.temp_c + ' °C')
+                        $('.weather-desc').text(data.context.data.current.condition.text)
+                        $('#icon').attr('href', data.context.data.current.condition.icon)
+                        $('#shortcut icon').attr('href', data.context.data.current.condition.icon)
 
-                    $('.value').each(function (index, element) {
-                        var newValue = values[index]; 
-                        $(element).text(newValue); 
-                    });
-                    //console.log($('.day-temp'))
-                    //console.log($('.day-name'))
 
-                    let forecast_days = Object.keys(data.context.forecast)
-                    let forecast_temp = Object.values(data.context.forecast)
-                    
-                    $('.day-name').each(function (index, element) {
-                        var newValue = forecast_days[index]; 
-                        $(element).text(newValue);  
-                    });
 
-                    $('.day-temp').each(function (index, element) {
-                        var newValue = forecast_temp[index]+' °C'; 
-                        $(element).text(newValue); 
-                    });
+                        values = [data.context.data.current.precip_mm + ' mm',
+                        data.context.data.current.humidity + ' %',
+                        data.context.data.current.feelslike_c + ' °C',
+                        data.context.data.current.wind_kph + ' km/h']
 
+                        $('.value').each(function (index, element) {
+                            var newValue = values[index];
+                            $(element).text(newValue);
+                        });
+                        //console.log($('.day-temp'))
+                        //console.log($('.day-name'))
+
+                        let forecast_days = Object.keys(data.context.forecast)
+                        let forecast_temp = Object.values(data.context.forecast)
+
+                        $('.day-name').each(function (index, element) {
+                            var newValue = forecast_days[index];
+                            $(element).text(newValue);
+                        });
+
+                        $('.day-temp').each(function (index, element) {
+                            var newValue = forecast_temp[index] + ' °C';
+                            $(element).text(newValue);
+                        });
+                    }
+                    else if (data.status == 0) {
+                        displayAlert('Please Input Valid data')
+                    }
+                    else if (data.status == 2) {
+                        displayAlert('Please Input a valid Country/City name')
+                    }
                 }
             })
         }
-    })
+
+    }
+
+    function displayAlert(message) {
+
+        var alerts = $('.alert');
+        if (alerts.length >= 1) {
+            //alerts[0].fade
+            $(".alert:first").fadeOut('slow', remove())
+        }
+        $('#alert').append(
+            `<div class="alert alert-warning alert-dismissible fade show" role="alert">
+            ${message}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>`
+        )
+    }
 </script>
