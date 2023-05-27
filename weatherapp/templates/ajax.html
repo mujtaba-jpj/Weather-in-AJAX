@@ -12,8 +12,7 @@
 
     $(document).ready(function () {
         $('#btnsave').on('click', function () {
-            // Check if the Enter key was pressed
-            var bsAlert = new bootstrap.Alert()
+
             get_weather()
         });
     });
@@ -61,8 +60,7 @@
                             var newValue = values[index];
                             $(element).text(newValue);
                         });
-                        //console.log($('.day-temp'))
-                        //console.log($('.day-name'))
+
 
                         let forecast_days = Object.keys(data.context.forecast)
                         let forecast_temp = Object.values(data.context.forecast)
@@ -93,7 +91,6 @@
 
         var alerts = $('.alert');
         if (alerts.length >= 1) {
-            //alerts[0].fade
             $(".alert:first").fadeOut('slow', remove())
         }
         $('#alert').append(

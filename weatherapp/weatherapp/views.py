@@ -7,7 +7,6 @@ import requests
 import datetime
 
 
-
 def test(keys, values):
     return dict(zip(keys, values))
 
@@ -26,8 +25,7 @@ def weather(request):
 
         data = requests.request("GET", url, params=params)
 
-
-        # error forwarding 
+        # error forwarding
         if data.status_code == 400:
             return JsonResponse({'status': 2})
 
@@ -57,18 +55,16 @@ def weather(request):
         forecast = test(forecast_days_name, forecastdata)
 
         context = {'search_query': search_query, 'data': data,
-               'day': day, 'forecast': forecast}
-        
-        return JsonResponse({'status': 1,'context' : context })
+                   'day': day, 'forecast': forecast}
 
+        return JsonResponse({'status': 1, 'context': context})
 
     else:
         return JsonResponse({'status': 0})
 
 
-
 def home(request):
-    
+
     url = 'http://api.weatherapi.com/v1/forecast.json'
 
     params = {
@@ -85,7 +81,6 @@ def home(request):
         data['location']['localtime_epoch'])
     day = dt.strftime('%A')
     # 4 days ahead
-    # Replace with your starting date
     start_date = datetime.date(dt.year, dt.month, dt.day)
 
     forecast_days_name = []
@@ -103,10 +98,6 @@ def home(request):
         forecastdata.append(forecast_data['day']['avgtemp_c'])
 
     forecast = test(forecast_days_name, forecastdata)
-    
+
     context = {'data': data, 'day': day, 'forecast': forecast}
     return render(request, 'weather.html', context)
-
-# def weather(request):
-#     if request.method == 'POST':
-#         return JsonResponse({'status': 'Save','test' : request.POST })
