@@ -6,11 +6,11 @@ Previously created weather app now in AJAX and jquery
 
 ## Screenshots
 
-![Home](weatherapp/static/images/home.png)
+![Home](static/images/home.png)
 
-![Search](weatherapp/static/images/search.png)
+![Search](static/images/search.png)
 
-![Error](weatherapp/static/images/error.png)
+![Error](static/images/error.png)
 
 ## Installation
 
