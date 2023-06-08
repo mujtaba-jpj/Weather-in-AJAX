@@ -101,3 +101,4 @@ def home(request):
 
     context = {'data': data, 'day': day, 'forecast': forecast}
     return render(request, 'weather.html', context)
+        
