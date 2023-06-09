@@ -3,6 +3,8 @@ from django.shortcuts import redirect, render
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
+
 import requests
 import datetime
 
@@ -10,7 +12,7 @@ import datetime
 def test(keys, values):
     return dict(zip(keys, values))
 
-
+@csrf_exempt
 def weather(request):
     if request.method == 'POST':
         search_query = request.POST['search_query']
