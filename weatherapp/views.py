@@ -12,7 +12,6 @@ import datetime
 def test(keys, values):
     return dict(zip(keys, values))
 
-@csrf_exempt
 def weather(request):
     if request.method == 'POST':
         search_query = request.POST['search_query']

@@ -33,7 +33,7 @@
             $.ajax({
                 url: "{% url 'weather' %}",
                 method: "POST",
-                data: mydata,
+                data: { 'csrfmiddlewaretoken': csr, 'search_query': search_query },
                 dataType: "json",
                 success: function (data) {
                     if (data.status == 1) {
